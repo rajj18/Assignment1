@@ -19,8 +19,6 @@ const createReviewController = async (req, res) => {
       }
 
       const user = await userModel.findById(req.user.id);
-      // console.log(resturant);
-      // console.log(resturant.usertype)
 
       // user and admin can create the review
 

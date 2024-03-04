@@ -20,3 +20,8 @@
 //     });
 //   }
 // };
+
+
+// const user = await userModel.findById(req.user.id);
+//     console.log(user)
+//     console.log(user.usertype)

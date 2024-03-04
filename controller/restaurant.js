@@ -23,8 +23,6 @@ const createResturantController = async (req, res) => {
 
     // Admin and Busniess Owner can create the restaurant with details
     const user = await userModel.findById(req.user.id);
-    console.log(user)
-    console.log(user.usertype)
 
     if(user.usertype === 'admin' || user.usertype === 'businessOwner'){
     const newResturant = await resturantModel.create({
@@ -96,18 +94,29 @@ const getResturantByIdController = async (req, res) => {
         message: "Please Provide Resturnat ID",
       });
     }
-    //find resturant
-    const resturant = await resturantModel.findById(resturantId);
-    if (!resturant) {
-      return res.status(404).send({
-        success: false,
-        message: "no restaurant found",
-      });
-    }
+
+    const user = await userModel.findById(req.user.id);
+    
+
+    //find restaurant
+    if(user.usertype === 'admin' || user.usertype === 'businessOwner'){
+      const resturant = await resturantModel.findById(resturantId);
+      if (!resturant) {
+        return res.status(404).send({
+          success: false,
+          message: "no restaurant found",
+        });
+      }
     res.status(200).send({
       success: true,
       resturant,
     });
+    } else{
+      return res.status(401).send({
+        success: false,
+        message: "Un-Authorized Access",
+      });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -134,9 +143,6 @@ const updateRestaurantController = async (req, res) => {
     }
     
     const user = await userModel.findById(req.user.id);
-    console.log(user)
-    console.log(user.usertype)
-
     // Admin and Busniess Owner can create the restaurant with details
 
       if(user.usertype === 'admin' || user.usertype === 'businessOwner'){
@@ -182,8 +188,6 @@ const deleteResturantController = async (req, res) => {
       });
     }
     const user = await userModel.findById(req.user.id);
-    console.log(user)
-    console.log(user.usertype)
 
     if(user.usertype === 'admin'){
     await resturantModel.findByIdAndDelete(resturantId);

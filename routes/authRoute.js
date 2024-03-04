@@ -7,9 +7,7 @@ const {
 
 const router = express.Router();
 
-// router.get('/check', (req,res)=>{
-//     res.status(200).send('hello world')
-// })
+
 //routes
 //REGISTER || POST
 router.post("/register", registerController);
