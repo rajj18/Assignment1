@@ -1,10 +1,7 @@
-﻿# Assignment1
-# Assignment
-
 # Assignment
 
 ## Description
-This project is a Node.js application for [provide a brief description of your project here].
+This project is a Node.js application for Restaurant Listing Platform.
 
 ## Installation
 1. Clone the repository:
