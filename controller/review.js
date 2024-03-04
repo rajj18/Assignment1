@@ -1,4 +1,5 @@
 const reviewModel = require('../modals/reviews')
+const userModel = require("../modals/userModal");
 // Create Review Controller
 const createReviewController = async (req, res) => {
     try {
@@ -16,7 +17,14 @@ const createReviewController = async (req, res) => {
           message: "Please provide restaurantId, userId, rating, and comment",
         });
       }
-  
+
+      const user = await userModel.findById(req.user.id);
+      // console.log(resturant);
+      // console.log(resturant.usertype)
+
+      // user and admin can create the review
+
+      if(user.usertype==='user' || user.usertype==='admin'){
       const newReview = new reviewModel({
         restaurantId,
         userId,
@@ -30,17 +38,24 @@ const createReviewController = async (req, res) => {
         success: true,
         message: "New Review created successfully",
       });
+    } else{
+      return res.status(401).send({
+        success: false,
+        message: "Un-Authorized Access",
+      });
+    }
     } catch (error) {
       console.log(error);
       res.status(500).send({
         success: false,
-        message: "Error in Create Review API",
+        message: "something went wrong",
         error: error.message,
       });
     }
   };
   
-  // Read Review Controller
+  // Read Review Controller 
+  // user, admin and businessOwner all can read the reviews
   const getReviewController = async (req, res) => {
     try {
       const reviews = await reviewModel.find();
@@ -53,13 +68,14 @@ const createReviewController = async (req, res) => {
       console.log(error);
       res.status(500).send({
         success: false,
-        message: "Error in Get Reviews API",
+        message: "something went wrong",
         error: error.message,
       });
     }
   };
   
   // Update Review Controller
+  // user, admin and businessOwner all can update the reviews
   const updateReviewController = async (req, res) => {
     try {
       // find user
@@ -68,7 +84,7 @@ const createReviewController = async (req, res) => {
       if (!user) {
         return res.status(404).send({
           success: false,
-          message: "user not found",
+          message: "review not found",
         });
       }
       //update
@@ -96,7 +112,11 @@ const createReviewController = async (req, res) => {
     try {
       const { id } = req.params;
       console.log(id)
-  
+      
+      // user and admin can delete the review
+      const resturant = await userModel.findById(req.user.id);
+      
+      if(resturant.usertype==='user' || resturant.usertype==='admin'){
       const review = await reviewModel.findByIdAndDelete(id);
   
       if (!review) {
@@ -110,11 +130,17 @@ const createReviewController = async (req, res) => {
         success: true,
         message: "Review deleted successfully",
       });
+    } else{
+      return res.status(401).send({
+        success: false,
+        message: "Un-Authorized Access",
+      });
+    }
     } catch (error) {
       console.log(error);
       res.status(500).send({
         success: false,
-        message: "Error in Delete Review API",
+        message: "something went wrong",
         error: error.message,
       });
     }

@@ -1,5 +1,4 @@
 const userModel = require("../modals/userModal");
-const bcrypt = require("bcrypt");
 
 
 
@@ -7,7 +6,8 @@ const bcrypt = require("bcrypt");
 const getUserController = async (req, res) => {
   try {
     // find user
-    const user = await userModel.findById({ _id: req.body.id });
+    const user = await userModel.find({});
+    console.log(user)
     //validation
     if (!user) {
       return res.status(404).send({
@@ -15,19 +15,19 @@ const getUserController = async (req, res) => {
         message: "User Not Found",
       });
     }
-    //hinde password
+    //hide password
     user.password = undefined;
     //resp
     res.status(200).send({
       success: true,
-      message: "User get Successfully",
+      message: "User retrived Successfully",
       user,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Eror in Get User API",
+      message: "something went wrong",
       error,
     });
   }
@@ -60,90 +60,7 @@ const updateUserController = async (req, res) => {
     console.log(erorr);
     res.status(500).send({
       success: false,
-      message: "Error In Udpate User API",
-      error,
-    });
-  }
-};
-
-// update user password
-const updatePasswordController = async (req, res) => {
-  try {
-    //find user
-    const user = await userModel.findById({ _id: req.body.id });
-    //valdiation
-    if (!user) {
-      return res.status(404).send({
-        success: false,
-        message: "Usre Not Found",
-      });
-    }
-    // get data from user
-    const { oldPassword, newPassword } = req.body;
-    if (!oldPassword || !newPassword) {
-      return res.status(500).send({
-        success: false,
-        message: "Please Provide Old or New PasswOrd",
-      });
-    }
-    //check user password  | compare password
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch) {
-      return res.status(500).send({
-        success: false,
-        message: "Invalid old password",
-      });
-    }
-    //hashing password
-    var salt = bcrypt.genSaltSync(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-    user.password = hashedPassword;
-    await user.save();
-    res.status(200).send({
-      success: true,
-      message: "Password Updated!",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Error In Password Update API",
-      error,
-    });
-  }
-};
-
-// reset password
-const resetPasswordController = async (req, res) => {
-  try {
-    const { email, newPassword, answer } = req.body;
-    if (!email || !newPassword || !answer) {
-      return res.status(500).send({
-        success: false,
-        message: "Please Provide All Fields",
-      });
-    }
-    const user = await userModel.findOne({ email, answer });
-    if (!user) {
-      return res.status(500).send({
-        success: false,
-        message: "User Not Found or invlaid answer",
-      });
-    }
-    //hashing password
-    var salt = bcrypt.genSaltSync(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-    user.password = hashedPassword;
-    await user.save();
-    res.status(200).send({
-      success: true,
-      message: "Password Reset SUccessfully",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "eror in PASSWORD RESET API",
+      message: "something went wrong",
       error,
     });
   }
@@ -161,7 +78,7 @@ const deleteProfileController = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Erorr In Delete Profile API",
+      message: "something went wrong",
       error,
     });
   }
@@ -170,7 +87,5 @@ const deleteProfileController = async (req, res) => {
 module.exports = {
   getUserController,
   updateUserController,
-  updatePasswordController,
-  resetPasswordController,
   deleteProfileController,
 };
