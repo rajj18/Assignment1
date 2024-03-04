@@ -1,4 +1,5 @@
 const JWT = require("jsonwebtoken");
+const userModel = require("../modals/userModal");
 
     module.exports.authenticateToken = async (req, res, next) => {
     try {
@@ -30,6 +31,7 @@ const JWT = require("jsonwebtoken");
         try {
           //const user = await userModel.findById(req.body.id);
           const userType =  req.user.usertype;
+          console.log(userType)
           if (userType !== "admin") {
             return res.status(401).send({
               success: false,

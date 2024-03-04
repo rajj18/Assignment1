@@ -62,29 +62,31 @@ const createReviewController = async (req, res) => {
   // Update Review Controller
   const updateReviewController = async (req, res) => {
     try {
-      const { id } = req.params;
-      const { rating, comment } = req.body;
-  
-      const review = await reviewModel.findByIdAndUpdate(id, { rating, comment }, { new: true });
-  
-      if (!review) {
+      // find user
+      const user = await reviewModel.findById({ _id: req.body.id });
+      //validation
+      if (!user) {
         return res.status(404).send({
           success: false,
-          message: "Review not found",
+          message: "user not found",
         });
       }
-  
+      //update
+      const { rating, comment } = req.body;
+      if (rating) user.rating = rating;
+      if (comment) user.comment = comment;
+      //save user
+      await user.save();
       res.status(200).send({
         success: true,
-        message: "Review updated successfully",
-        data: review,
+        message: "Review Updated SUccessfully",
       });
     } catch (error) {
-      console.log(error);
+      console.log(erorr);
       res.status(500).send({
         success: false,
-        message: "Error in Update Review API",
-        error: error.message,
+        message: "something went wrong",
+        error,
       });
     }
   };
@@ -93,6 +95,7 @@ const createReviewController = async (req, res) => {
   const deleteReviewController = async (req, res) => {
     try {
       const { id } = req.params;
+      console.log(id)
   
       const review = await reviewModel.findByIdAndDelete(id);
   
