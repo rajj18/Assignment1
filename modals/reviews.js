@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 // Define the review schema
 const reviewSchema = new mongoose.Schema({
   restaurantTitle: {
-    type: String,
-    required: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Resturant',
+    required: true,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -25,7 +26,9 @@ const reviewSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-});
+},
+    { timestamps: true }
+);
 
 // export
 module.exports = mongoose.model('Review', reviewSchema);

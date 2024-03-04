@@ -6,24 +6,24 @@ const {
   resetPasswordController,
   deleteProfileController,
 } = require("../controller/user");
-const authMiddleware = require("../middlewares/authmid");
+const {adminCheck, businessOwnerCheck, userCheck} = require('../middlewares/authmid')
 
 const router = express.Router();
 
 //routes
 // GET USER || GET
-router.get("/getUser", authMiddleware, getUserController);
+router.get("/getUser", getUserController);
 
 // UPDATE PROFILE
-router.put("/updateUser", authMiddleware, updateUserController);
+router.put("/updateUser", updateUserController);
 
 //password update
-router.post("/updatePassword", authMiddleware, updatePasswordController);
+router.post("/updatePassword", updatePasswordController);
 
 // RESET PASSWORD
-router.post("/resetPassword", authMiddleware, resetPasswordController);
+router.post("/resetPassword", resetPasswordController);
 
 // delete USER
-router.delete("/deleteUser/:id", authMiddleware, deleteProfileController);
+router.delete("/deleteUser/:id", deleteProfileController);
 
 module.exports = router;

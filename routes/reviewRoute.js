@@ -5,21 +5,21 @@ const {
   getReviewController,
   deleteReviewController,
 } = require("../controller/review");
-const authMiddleware = require("../middlewares/authmid");
+const {adminCheck, businessOwnerCheck, userCheck} = require('../middlewares/authmid')
 
 const router = express.Router();
 
 //routes
 // GET USER || GET
-router.post("/createReview", authMiddleware, createReviewController);
+router.post("/createReview", createReviewController);
 
 // UPDATE PROFILE
-router.put("/updateReview", authMiddleware, updateReviewController);
+router.put("/updateReview", updateReviewController);
 
 // RESET PASSWORD
-router.get("/getReview", authMiddleware, getReviewController);
+router.get("/getReview", getReviewController);
 
 // delete USER
-router.delete("/deleteReview/:id", authMiddleware, deleteReviewController);
+router.delete("/deleteReview/:id", deleteReviewController);
 
 module.exports = router;

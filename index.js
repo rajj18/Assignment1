@@ -2,11 +2,15 @@ const express = require('express')
 const dotenv = require("dotenv");
 const connectDb = require('./config/db');
 const app = express();
+const router = express.Router()
+const customRoute = require('./routes/routes')
 
 dotenv.config()
 connectDb()
 app.use(express.json());
 
+app.use(router)
+router.use('/api', customRoute)
 app.get("/", (req, res) => {
     return res
       .status(200)

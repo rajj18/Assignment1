@@ -17,14 +17,14 @@ const createResturantController = async (req, res) => {
         message: "please provide title and address",
       });
     }
-    const newResturant = new resturantModel({
+    const newResturant = await resturantModel.create({
         title,
         imageUrl,
         isOpen,
         rating,
         address,
     });
-
+   
     await newResturant.save();
 
     res.status(201).send({

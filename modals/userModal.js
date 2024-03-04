@@ -22,12 +22,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "phone number is require"],
     },
-    // usertype: {
-    //   type: String,
-    //   required: [true, "user type is required"],
-    //   //default: "user",
-    //   enum: ["user", "admin", "businessOwner"],
-    // },
+    usertype: {
+      type: String,
+      required: [true, "user type is required"],
+      //default: "user",
+      enum: ["user", "admin", "businessOwner"],
+    },
     // profile: {
     //   type: String,
     //   default:

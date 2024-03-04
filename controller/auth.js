@@ -1,13 +1,13 @@
 const userModel = require("../modals/userModal");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
 
 // REGISTER
 const registerController = async (req, res) => {
     try {
-      const { userName, email, password, phone, address } = req.body;
+      const { userName, email, password, phone, address, userType } = req.body;
       // Detail validation
-      if (!userName || !email || !password || !address || !phone) {
+      if (!userName || !email || !password || !address || !phone || !userType) {
         return res.status(400).json({
           success: false,
           message: "Please provide all fields.",
@@ -31,10 +31,18 @@ const registerController = async (req, res) => {
         password: hashedPassword,
         address,
         phone,
+        usertype: userType
       });
+      // token
+      const token = JWT.sign({ id: user._id , role:userType}, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+      // Response
       res.status(201).json({
         success: true,
         message: "Successfully registered.",
+        token,
+        userType
       });
     } catch (error) {
       console.error("Error registering user:", error);

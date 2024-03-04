@@ -5,7 +5,7 @@ const resturantSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, " Resturant title is required"],
+      required: [true, " Restaurant title is required"],
     },
     imageUrl: {
       type: String,

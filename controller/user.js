@@ -1,5 +1,5 @@
 const userModel = require("../modals/userModal");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 
 
 
